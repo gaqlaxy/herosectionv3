@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OH Architecture - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            background: #000;
+        }
+
+        .hero-bg-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: -10%;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)),
+                url('https://plus.unsplash.com/premium_photo-1684445035564-c98efbe1fb7d?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            will-change: transform;
+        }
+
+        /* HOVER PREVIEW OVERLAY */
+        .hover-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            transform: translateY(100%);
+            z-index: 150;
+            /* now above hero */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform: translateY(100%);
+            transition: none;
+            pointer-events: none;
+            /* still not clickable */
+        }
+
+        .hover-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #000 0%, #1a1a1a 50%, #000 100%);
+            opacity: 0;
+        }
+
+        .hover-preview img {
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(1.2);
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        .preview-overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(30px);
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .preview-overlay-text h3 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .preview-overlay-text p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+        }
+
+        /* HERO CONTENT */
+        .hero-content {
+            position: relative;
+            padding: 5rem;
+            max-width: 700px;
+            z-index: 101;
+        }
+
+        .featured-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            font-weight: 300;
+            color: #ddd;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .view-project {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: white;
+            color: black;
+            padding: 14px 32px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .view-project::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .view-project:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .view-project:hover {
+            background: black;
+            color: white;
+            box-shadow: 0 0 0 2px white;
+            transform: translateY(-2px);
+        }
+
+        .view-project::after {
+            content: '→';
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .view-project:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            right: 3rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            writing-mode: vertical-rl;
+            z-index: 101;
+        }
+
+        /* ABOUT SECTION */
+        .about {
+            min-height: 100vh;
+            background: #fafafa;
+            color: #111;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 8rem 5rem;
+        }
+
+        .about-left h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .about-left .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .about-right {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .about-right p {
+            font-size: 1.1rem;
+            color: #444;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            border-top: 2px solid #ddd;
+            padding-top: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .about {
+                grid-template-columns: 1fr;
+                padding: 4rem 3rem;
+            }
+
+            .about-left h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                padding: 3rem 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .hover-preview img {
+                width: 90%;
+                height: 60vh;
+            }
+
+            .preview-overlay-text h3 {
+                font-size: 2rem;
+            }
+
+            .preview-overlay-text p {
+                font-size: 0.9rem;
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+
+            .about {
+                padding: 3rem 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Focus States for Accessibility */
+        .view-project:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 4px;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="hero" role="banner">
+            <div class="hero-bg-wrapper">
+                <div class="hero-bg" id="heroBg"></div>
+            </div>
+
+            <!-- HOVER PREVIEW -->
+            <div class="hover-preview" id="hoverPreview" aria-hidden="true">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1600&auto=format&fit=crop"
+                    alt="Architecture project interior preview">
+                <div class="preview-overlay-text">
+                    <h3>Myrtle Pool House</h3>
+                    <p>Explore the Project</p>
+                </div>
+            </div>
+
+            <div class="hero-content">
+                <div class="featured-label">FEATURED PROJECT</div>
+                <h1>Strong Forms.<br>Subtle Elegance.</h1>
+                <p>The OH-inspired design blends bold architecture with natural harmony and timeless appeal.</p>
+                <a href="#project" class="view-project" aria-label="View detailed project information">
+                    View Project
+                </a>
+            </div>
+
+            <div class="scroll-indicator" aria-hidden="true">(SCROLL DOWN)</div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section class="about" id="about">
+            <div class="about-left">
+                <h2>Creating spaces that inspire and endure</h2>
+                <p class="subtitle">Architecture with purpose and poetry</p>
+            </div>
+            <div class="about-right">
+                <p>
+                    OH Architecture is a design studio specializing in residential and commercial architecture.
+                    Our approach combines modernist principles with careful attention to materiality, light,
+                    and the unique character of each site.
+                </p>
+                <p>
+                    We believe great architecture emerges from deep listening—to our clients, to the land,
+                    and to the possibilities inherent in every project. Each design is crafted to enhance
+                    daily life while creating lasting value.
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">150+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">25+</div>
+                        <div class="stat-label">Awards</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Years</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Parallax background effect
+        gsap.to("#heroBg", {
+            yPercent: 15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: 1
+            }
+        });
+
+        // Hero content fade out on scroll
+        gsap.to(".hero-content", {
+            opacity: 0,
+            y: -50,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "70% top",
+                scrub: 1
+            }
+        });
+
+        // Initial hero content animation
+        gsap.from(".hero-content", {
+            y: 60,
+            opacity: 0,
+            duration: 1.4,
+            ease: "power3.out",
+            delay: 0.3
+        });
+
+        gsap.from(".featured-label", {
+            opacity: 0,
+            y: 20,
+            duration: 1,
+            delay: 0.5
+        });
+
+        gsap.from(".scroll-indicator", {
+            opacity: 0,
+            duration: 1,
+            delay: 1.2
+        });
+
+        // About section animations
+        gsap.from(".about-left h2", {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".about",
+                start: "top 70%",
+            }
+        });
+
+        gsap.from(".about-left .subtitle", {
+            opacity: 0,
+            y: 30,
+            duration: 1,
+            delay: 0.2,
+            scrollTrigger: {
+                trigger: ".about",
+                start: "top 70%",
+            }
+        });
+
+        gsap.from(".about-right p", {
+            opacity: 0,
+            y: 40,
+            duration: 1,
+            stagger: 0.2,
+            scrollTrigger: {
+                trigger: ".about",
+                start: "top 70%",
+            }
+        });
+
+        gsap.from(".stat-item", {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            stagger: 0.15,
+            scrollTrigger: {
+                trigger: ".stats-grid",
+                start: "top 85%",
+            }
+        });
+
+        // Hover preview effect with cool page transition
+        // Hover preview effect with smooth modal transition
+        // Hover preview with preloading + smooth performance
+        const viewProject = document.querySelector('.view-project');
+        const hoverPreview = document.getElementById('hoverPreview');
+        const previewImage = hoverPreview.querySelector('img');
+        const previewText = hoverPreview.querySelector('.preview-overlay-text');
+
+        // ✅ Preload image before animations
+        const preloadImage = (src) => {
+            const img = new Image();
+            img.src = src;
+        };
+        preloadImage(previewImage.src);
+
+        // ✅ Build GSAP timeline once (not on hover)
+        const tl = gsap.timeline({ paused: true, defaults: { ease: "power4.inOut" } });
+
+        tl.to(hoverPreview, {
+            y: 0,
+            duration: 0.9,
+            pointerEvents: "auto"
+        })
+            .to(previewImage, {
+                opacity: 1,
+                scale: 1,
+                filter: "blur(0px)",
+                duration: 1.2,
+                ease: "power3.out"
+            }, "-=0.5")
+            .to(previewText, {
+                opacity: 1,
+                y: -20,
+                duration: 0.8,
+                ease: "power2.out"
+            }, "-=0.6");
+
+        // ✅ Event listeners
+        viewProject.addEventListener("mouseenter", () => tl.play());
+        viewProject.addEventListener("mouseleave", () => tl.reverse());
+        viewProject.addEventListener("focus", () => tl.play());
+        viewProject.addEventListener("blur", () => tl.reverse());
+
+
+    </script>
+</body>
+
+</html>
