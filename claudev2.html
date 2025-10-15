@@ -50,12 +50,29 @@
         left: 0;
         width: 100%;
         height: 120%;
-        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)),
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)),
           url("https://plus.unsplash.com/premium_photo-1684445035564-c98efbe1fb7d?q=80&w=1600&auto=format&fit=crop");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         will-change: transform;
+      }
+
+      /* Dark overlay with vertical lines pattern */
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40%;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.8) 0%,
+          transparent 100%
+        );
+        z-index: 2;
+        pointer-events: none;
       }
 
       /* HOVER PREVIEW OVERLAY */
@@ -124,27 +141,66 @@
       }
 
       /* HERO CONTENT */
+      .hero-top-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 2.5rem 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 101;
+      }
+
+      .hero-top-left {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        width: 100%;
+      }
+
+      .featured-label {
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        font-weight: 400;
+        opacity: 0.9;
+        flex: 1;
+      }
+
+      .project-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        font-weight: 500;
+        flex: 1;
+        text-align: center;
+      }
+
+      .project-year {
+        font-size: 0.95rem;
+        letter-spacing: 0.15em;
+        font-weight: 300;
+        opacity: 0.8;
+        flex: 1;
+        text-align: center;
+      }
+
       .hero-content {
-        position: relative;
-        padding: 5rem;
+        position: absolute;
+        bottom: 3rem;
+        left: 3rem;
         max-width: 700px;
         z-index: 101;
       }
 
-      .featured-label {
-        font-size: 0.75rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        font-weight: 300;
-        margin-bottom: 1rem;
-        opacity: 0.8;
-      }
-
       .hero-content h1 {
-        font-size: 3.5rem;
-        font-weight: 700;
-        line-height: 1.2;
-        margin-bottom: 1.5rem;
+        font-size: 32px;
+        font-weight: 400;
+        line-height: 1.3;
+        margin-bottom: 0;
+        letter-spacing: -0.02em;
       }
 
       .hero-content p {
@@ -153,55 +209,51 @@
         color: #ddd;
         margin-bottom: 2.5rem;
         line-height: 1.7;
+        display: none;
       }
 
       .view-project {
         display: inline-flex;
         align-items: center;
         gap: 0.8rem;
-        background: white;
-        color: black;
-        padding: 14px 32px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        letter-spacing: 0.05em;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 12px 24px;
+        font-weight: 400;
+        font-size: 0.85rem;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        border-radius: 50px;
         text-decoration: none;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         position: relative;
-        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        white-space: nowrap;
+        margin-left: 2rem;
+        flex-shrink: 0;
       }
 
       .view-project::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(0, 0, 0, 0.1);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s, height 0.6s;
+        content: none;
       }
 
       .view-project:hover::before {
-        width: 300px;
-        height: 300px;
+        width: 0;
+        height: 0;
       }
 
       .view-project:hover {
-        background: black;
+        background: rgba(255, 255, 255, 0.2);
         color: white;
-        box-shadow: 0 0 0 2px white;
-        transform: translateY(-2px);
+        box-shadow: none;
+        transform: translateX(5px);
+        border-color: rgba(255, 255, 255, 0.5);
       }
 
       .view-project::after {
-        content: "→";
-        font-size: 1.2rem;
+        content: "○";
+        font-size: 1rem;
         transition: transform 0.3s;
+        margin-left: 0.3rem;
       }
 
       .view-project:hover::after {
@@ -213,12 +265,13 @@
         position: absolute;
         bottom: 3rem;
         right: 3rem;
-        font-size: 0.7rem;
-        letter-spacing: 0.15em;
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        opacity: 0.6;
+        opacity: 0.7;
         writing-mode: vertical-rl;
         z-index: 101;
+        font-weight: 400;
       }
 
       /* ABOUT SECTION */
@@ -289,7 +342,11 @@
       /* RESPONSIVE */
       @media (max-width: 1024px) {
         .hero-content h1 {
-          font-size: 2.8rem;
+          font-size: 2.5rem;
+        }
+
+        .hero-top-left {
+          gap: 2rem;
         }
 
         .about {
@@ -303,16 +360,27 @@
       }
 
       @media (max-width: 768px) {
+        .hero-top-bar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1.5rem;
+          padding: 2rem;
+        }
+
+        .hero-top-left {
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: flex-start;
+        }
+
         .hero-content {
-          padding: 3rem 2rem;
+          bottom: 2rem;
+          left: 2rem;
+          right: 2rem;
         }
 
         .hero-content h1 {
-          font-size: 2rem;
-        }
-
-        .hero-content p {
-          font-size: 1rem;
+          font-size: 1.8rem;
         }
 
         .hover-preview img {
@@ -360,7 +428,6 @@
       }
     </style>
   </head>
-
   <body>
     <main>
       <!-- HERO SECTION -->
@@ -381,20 +448,28 @@
           </div>
         </div>
 
-        <div class="hero-content">
-          <div class="featured-label">FEATURED PROJECT</div>
-          <h1>Strong Forms.<br />Subtle Elegance.</h1>
-          <p>
-            The OH-inspired design blends bold architecture with natural harmony
-            and timeless appeal.
-          </p>
+        <!-- Top Bar -->
+        <div class="hero-top-bar">
+          <div class="hero-top-left">
+            <div class="featured-label">FEATURED PROJECT</div>
+            <div class="project-title">MYRTLE POOL HOUSE</div>
+            <div class="project-year">2024</div>
+          </div>
           <a
             href="#project"
             class="view-project"
             aria-label="View detailed project information"
           >
-            View Project
+            VIEW PROJECT
           </a>
+        </div>
+
+        <!-- Bottom Hero Text -->
+        <div class="hero-content">
+          <h1>
+            The OH Architecture style is defined by strong, solid forms with
+            subtle elegance, natural balance and enduring appeal
+          </h1>
         </div>
 
         <div class="scroll-indicator" aria-hidden="true">(SCROLL DOWN)</div>
@@ -468,19 +543,48 @@
         },
       });
 
-      // Initial hero content animation
-      gsap.from(".hero-content", {
-        y: 60,
+      // Initial hero animations
+      gsap.from(".hero-top-bar", {
+        y: -50,
         opacity: 0,
-        duration: 1.4,
+        duration: 1.2,
         ease: "power3.out",
         delay: 0.3,
       });
 
       gsap.from(".featured-label", {
         opacity: 0,
-        y: 20,
+        x: -20,
         duration: 1,
+        delay: 0.6,
+      });
+
+      gsap.from(".project-title", {
+        opacity: 0,
+        x: -20,
+        duration: 1,
+        delay: 0.7,
+      });
+
+      gsap.from(".project-year", {
+        opacity: 0,
+        x: -20,
+        duration: 1,
+        delay: 0.8,
+      });
+
+      // gsap.from(".view-project", {
+      //   opacity: 0,
+      //   x: 20,
+      //   duration: 1,
+      //   delay: 0.9,
+      // });
+
+      gsap.from(".hero-content h1", {
+        y: 60,
+        opacity: 0,
+        duration: 1.4,
+        ease: "power3.out",
         delay: 0.5,
       });
 
@@ -547,9 +651,8 @@
       // Slide up the entire overlay from bottom
       tl.to(hoverPreview, {
         y: 0,
-        duration: 0.5,
-        // ease: "power4.inOut",
-        ease: "slow(0.7,0.7,false)",
+        duration: 0.9,
+        ease: "power4.inOut",
       })
         // Image fades and slides up with parallax effect (slower)
         .to(
