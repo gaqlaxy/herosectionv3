@@ -21,7 +21,7 @@
         font-family: "Poppins", sans-serif;
         overflow-x: hidden;
         background: #000;
-        color: #fff;
+        color: #f2f0ef;
       }
 
       /* HERO SECTION */
@@ -50,12 +50,27 @@
         left: 0;
         width: 100%;
         height: 120%;
+        /* background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)),
+          url(""); */
         background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)),
-          url("https://plus.unsplash.com/premium_photo-1684445035564-c98efbe1fb7d?q=80&w=1600&auto=format&fit=crop");
+          url("https://website-data-pluckwalk.s3-ap-south-1.amazonaws.com/test/38h6fE1nuT49Zt2Za3kKhw.jpeg");
         background-size: cover;
         background-position: center;
+        /* backdrop-filter: blur(10px); */
+
         background-repeat: no-repeat;
+
         will-change: transform;
+      }
+      .hero-bg-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px); /* For Safari support */
+        z-index: 2;
       }
 
       /* Dark overlay with vertical lines pattern */
@@ -143,7 +158,7 @@
       /* HERO CONTENT */
       .hero-top-bar {
         position: absolute;
-        top: 0;
+        top: 14rem;
         left: 0;
         width: 100%;
         padding: 2.5rem 3rem;
@@ -161,11 +176,10 @@
       }
 
       .featured-label {
-        font-size: 0.7rem;
-        letter-spacing: 0.25em;
+        font-size: 0.95rem;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        font-weight: 400;
-        opacity: 0.9;
+        font-weight: 500;
         flex: 1;
       }
 
@@ -189,8 +203,8 @@
 
       .hero-content {
         position: absolute;
-        bottom: 3rem;
-        left: 3rem;
+        bottom: 1.5rem;
+        left: 1.5rem;
         max-width: 700px;
         z-index: 101;
       }
@@ -216,49 +230,101 @@
         display: inline-flex;
         align-items: center;
         gap: 0.8rem;
-        background: rgba(255, 255, 255, 0.1);
+        background: transparent;
         color: white;
-        padding: 12px 24px;
+        padding: 8px 0;
         font-weight: 400;
         font-size: 0.85rem;
         letter-spacing: 0.2em;
         text-transform: uppercase;
         text-decoration: none;
-        transition: all 0.3s ease;
         position: relative;
-        border: 1px solid rgba(255, 255, 255, 0.3);
         white-space: nowrap;
         margin-left: 2rem;
         flex-shrink: 0;
+        overflow: hidden;
+        height: 1.2em;
+      }
+      .view-project-text {
+        position: relative;
+        display: inline-block;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .view-project-text::after {
+        content: "VIEW PROJECT";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        white-space: nowrap;
+      }
+
+      .view-project:hover .view-project-text {
+        transform: translateY(-100%);
       }
 
       .view-project::before {
-        content: none;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: white;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       .view-project:hover::before {
-        width: 0;
-        height: 0;
+        width: calc(100% - 1.5rem);
       }
 
-      .view-project:hover {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        box-shadow: none;
-        transform: translateX(5px);
-        border-color: rgba(255, 255, 255, 0.5);
+      .view-project-arrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1rem;
+        height: 1rem;
+        position: relative;
+        overflow: hidden;
+        margin-left: 0.5rem;
+      }
+
+      .view-project-arrow svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .view-project-arrow svg:first-child {
+        transform: translate(0, 0);
+      }
+
+      .view-project-arrow svg:last-child {
+        transform: translate(-150%, 150%);
+      }
+
+      .view-project:hover .view-project-arrow svg:first-child {
+        transform: translate(150%, -150%);
+      }
+
+      .view-project:hover .view-project-arrow svg:last-child {
+        transform: translate(0, 0);
+      }
+
+      /* .view-project:hover {
+        color: rgba(255, 255, 255, 0.9);
       }
 
       .view-project::after {
-        content: "○";
+        content: "→";
         font-size: 1rem;
-        transition: transform 0.3s;
-        margin-left: 0.3rem;
+        transition: transform 0.3s ease;
+        margin-left: 0.5rem;
       }
 
       .view-project:hover::after {
         transform: translateX(5px);
-      }
+      } */
 
       /* Scroll Indicator */
       .scroll-indicator {
@@ -284,6 +350,8 @@
         gap: 4rem;
         align-items: center;
         padding: 8rem 5rem;
+        position: relative;
+        z-index: 10;
       }
 
       .about-left h2 {
@@ -433,13 +501,15 @@
       <!-- HERO SECTION -->
       <section class="hero" role="banner">
         <div class="hero-bg-wrapper">
+          <div class="hero-bg-overlay"></div>
+
           <div class="hero-bg" id="heroBg"></div>
         </div>
 
         <!-- HOVER PREVIEW -->
         <div class="hover-preview" id="hoverPreview" aria-hidden="true">
           <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1600&auto=format&fit=crop"
+            src="Overlay1.jpeg"
             alt="Architecture project interior preview"
           />
           <div class="preview-overlay-text">
@@ -455,12 +525,37 @@
             <div class="project-title">MYRTLE POOL HOUSE</div>
             <div class="project-year">2024</div>
           </div>
-          <a
+          <!-- <a
             href="#project"
             class="view-project"
             aria-label="View detailed project information"
           >
             VIEW PROJECT
+          </a> -->
+          <a
+            href="#project"
+            class="view-project"
+            aria-label="View detailed project information"
+          >
+            <span class="view-project-text">VIEW PROJECT</span>
+            <span class="view-project-arrow">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </span>
           </a>
         </div>
 
@@ -530,17 +625,12 @@
         },
       });
 
-      // Hero content fade out on scroll
-      gsap.to(".hero-content", {
-        opacity: 0,
-        y: -50,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "70% top",
-          scrub: 1,
-        },
+      ScrollTrigger.create({
+        trigger: ".hero",
+        start: "top top",
+        end: "bottom top",
+        pin: true,
+        pinSpacing: false,
       });
 
       // Initial hero animations
